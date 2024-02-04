@@ -35,7 +35,7 @@
                 });
             } else {
                 startBtn.disabled = false;
-                inputPlace._flatpickr.config.disable = [userSelectedDate];
+                inputPlace.setAttribute('readonly', true);
                 
             }
         },

@@ -12,29 +12,28 @@ function onButtonClick(e) {
   e.preventDefault();
 
   const userInput = input.value;
-  console.log(userInput);
-
-  const chooseState = document.querySelector(
-    'input[name="state"]:checked'
-  ).value;
+  const chooseState = document.querySelector('input[name="state"]:checked').value;
 
   const promise = new Promise((resolve, reject) => {
-    if (!userInput) {
-      reject('No delay selected');
-      return;
-    }
+    const delay = userInput; 
+    setTimeout(() => {
+      if (!userInput) {
+        reject('No delay selected');
+      } else {
+        resolve(userInput);
+      }
+    }, delay); 
 
-    resolve(userInput);
-    form.reset();
+    form.reset(); 
   });
 
   promise.then(delay => {
-    setTimeout(() => {
-      if (chooseState === 'fulfilled') {
-        iziToast.show({ title: `✅ Fulfilled promise in ${delay}ms` });
-      } else if (chooseState === 'rejected') {
-        iziToast.show({ title: `❌ Rejected promise in ${delay}ms` });
-      }
-    }, delay);
+    if (chooseState === 'fulfilled') {
+      iziToast.show({ title: `✅ Fulfilled promise in ${delay}ms` });
+    } else if (chooseState === 'rejected') {
+      iziToast.show({ title: `❌ Rejected promise in ${delay}ms` });
+    }
+  }).catch(error => {
+    iziToast.error({ title: error });
   });
 }
