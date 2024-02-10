@@ -18,6 +18,8 @@ let countdown;
 let userSelectedDate;
 let flatpickrInstance;
 
+
+
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -25,7 +27,7 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
         userSelectedDate = selectedDates[0];
-
+       
         const now = new Date();
         if (userSelectedDate <= now) {
             startBtn.disabled = true;
@@ -37,10 +39,11 @@ const options = {
             startBtn.disabled = false;
             inputPlace.disabled = true;
         }
+       return;
     },
 };
 
-function addLeadingZero(value) {
+function addZero(value) {
     return value.toString().padStart(2, '0');
 }
 
@@ -48,6 +51,7 @@ function updateTimer(selectedDate) {
     countdown = setInterval(() => {
         const now = new Date();
         const diff = selectedDate - now;
+ 
 
         if (diff <= 0) {
             clearInterval(countdown);
@@ -55,21 +59,21 @@ function updateTimer(selectedDate) {
             hoursEl.textContent = '00';
             minutesEl.textContent = '00';
             secondsEl.textContent = '00';
-            startBtn.disabled = false;
+            startBtn.disabled = true;
+            inputPlace.disabled = false; 
 
             flatpickrInstance.destroy();
             flatpickrInstance = flatpickr("#datetime-picker", options);
-
-            inputPlace.disabled = false; 
-
+            userSelectedDate = new Date(flatpickrInstance.selectedDates[0]);
+         
             return;
         }
 
         const remainingTime = convertMs(diff);
-        daysEl.textContent = addLeadingZero(remainingTime.days);
-        hoursEl.textContent = addLeadingZero(remainingTime.hours);
-        minutesEl.textContent = addLeadingZero(remainingTime.minutes);
-        secondsEl.textContent = addLeadingZero(remainingTime.seconds);
+        daysEl.textContent = addZero(remainingTime.days);
+        hoursEl.textContent = addZero(remainingTime.hours);
+        minutesEl.textContent = addZero(remainingTime.minutes);
+        secondsEl.textContent = addZero(remainingTime.seconds);
     }, 1000);
 }
 
@@ -106,3 +110,7 @@ startBtn.addEventListener('click', () => {
     flatpickr(inputPlace).close(); 
     updateTimer(userSelectedDate);
 });
+
+
+
+
